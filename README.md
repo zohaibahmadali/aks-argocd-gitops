@@ -1,25 +1,35 @@
-# Argo CD GitOps Manifests
+# Argo CD Kubernetes GitOps
 
-This repository contains Kubernetes manifests managed through GitOps.
+This repository stores Kubernetes manifests managed by Argo CD.
 
-## NGINX application
+Git is the source of truth for our Kubernetes infrastructure.
 
-The NGINX application is defined in [`apps/nginx/`](apps/nginx/):
+## Applications
 
-- `deployment.yaml` runs two NGINX replicas with health probes and resource requests/limits.
-- `service.yaml` exposes NGINX internally through a `ClusterIP` Service on port 80.
+### NGINX
 
-### Apply locally
+Location: `apps/nginx/`
 
-```bash
-kubectl apply -f apps/nginx/
-kubectl get deployment,service -l app.kubernetes.io/name=nginx
-```
+Resources:
 
-### Access locally
+- Namespace
+- Deployment
+- Service
 
-```bash
-kubectl port-forward service/nginx 8080:80
-```
+Configuration:
 
-Then open <http://localhost:8080>.
+- 2 replicas
+- Rolling updates
+- Readiness and liveness probes
+- CPU and memory requests/limits
+- Internal ClusterIP service
+
+## Deployment
+
+Argo CD monitors this repository and synchronizes
+the Kubernetes resources with the desired state
+defined in Git.
+
+## Architecture
+
+GitHub → Argo CD → Kubernetes
